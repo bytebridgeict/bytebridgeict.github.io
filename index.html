@@ -999,22 +999,39 @@ const form = document.getElementById('contactForm');
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const btn = form.querySelector('button[type=submit]');
-  btn.textContent = 'Sending…'; btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const data = new FormData(form);
+
   try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { Accept: 'application/json' }
+    const res = await fetch('https://formspree.io/f/mzdlebjn', {
+      method:  'POST',
+      headers: { 'Accept': 'application/json' },
+      body:    data
     });
+
+    const json = await res.json();
+
     if (res.ok) {
       form.reset();
+      btn.textContent = '✓ Message Sent!';
+      btn.style.background = '#0D6048';
       document.getElementById('formSuccess').style.display = 'block';
-      btn.textContent = 'Sent ✓';
     } else {
-      btn.textContent = 'Error — try emailing us directly';
+      // Show the actual Formspree error so we can see what's wrong
+      const errMsg = json.errors
+        ? json.errors.map(e => e.message).join(', ')
+        : 'Submission failed';
+      btn.textContent = '❌ ' + errMsg;
+      btn.disabled = false;
+      console.error('Formspree error:', json);
     }
-  } catch {
-    btn.textContent = 'Error — check your connection';
+  } catch (err) {
+    btn.textContent = '❌ Network error — check connection';
+    btn.disabled = false;
+    console.error('Network error:', err);
   }
 });
 </script>
