@@ -856,9 +856,9 @@ ul   { list-style: none; }
           </div>
         </div>
       </div>
-      <!-- ↑ LEFT COLUMN closes here -->
+      <!-- LEFT COLUMN ends -->
 
-      <!-- RIGHT COLUMN — form -->
+      <!-- RIGHT COLUMN -->
       <div class="fade-in">
         <form class="contact-form" action="https://formspree.io/f/mzdlebjn" method="POST" id="contactForm">
           <div class="form-row">
@@ -905,125 +905,87 @@ ul   { list-style: none; }
   </div>
 </section>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════════ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">
-          <span class="byte">byte</span><span class="bridge">bridge</span>
-        </div>
-        <div class="footer-tagline">
-          Innovative ICT Solutions for a Connected Future.<br>
-          Small bytes. Big connections.
-        </div>
-        <div class="footer-reg">
-          BRN-G5SQE4YG &nbsp;·&nbsp; ISIC J-62-620-6202<br>
-          Registered under Business Registration Act (No. 12 of 2012)
-        </div>
-      </div>
-      <div>
-        <div class="footer-heading">Services</div>
-        <ul class="footer-links">
-          <li><a href="#services">Software Development</a></li>
-          <li><a href="#services">Networking Solutions</a></li>
-          <li><a href="#services">ICT Accessories</a></li>
-          <li><a href="#services">CCTV &amp; Security</a></li>
-          <li><a href="#pricing">Pricing Guide</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-heading">Company</div>
-        <ul class="footer-links">
-          <li><a href="#about">About ByteBridge</a></li>
-          <li><a href="#team">Our Team</a></li>
-          <li><a href="#contact">Contact Us</a></li>
-          <li><a href="mailto:bytebridgeict@gmail.com">bytebridgeict@gmail.com</a></li>
-          <li><a href="tel:+265999377957">+265-999 377 957</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2026 ByteBridge. All rights reserved. Lilongwe, Malawi.</div>
-      <div class="footer-socials">
-        <a class="social-btn" href="https://facebook.com/ByteBridgeICT" target="_blank" rel="noopener" aria-label="Facebook">f</a>
-        <a class="social-btn" href="mailto:bytebridgeict@gmail.com" aria-label="Email">@</a>
-        <a class="social-btn" href="https://wa.me/265999377957" target="_blank" rel="noopener" aria-label="WhatsApp">W</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- ═══ BACK TO TOP ═══════════════════════════════════════════ -->
-<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
-
-<!-- ═══ JAVASCRIPT ════════════════════════════════════════════ -->
+<!-- ═══ JAVASCRIPT ════════════════════════════════════════════════ -->
 <script>
-// ── Navbar scroll shadow ───────────────────────────────────
-const nav = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 20);
-  document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
-});
+document.addEventListener('DOMContentLoaded', function () {
 
-// ── Active nav link on scroll ─────────────────────────────
-const sections = document.querySelectorAll('section[id], div.stats-bar');
-const navLinks  = document.querySelectorAll('.nav-links a');
-const observer  = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navLinks.forEach(l => {
-        l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id);
-      });
-    }
+  // ── Navbar scroll shadow ─────────────────────────────────
+  const nav     = document.getElementById('navbar');
+  const backTop = document.getElementById('backTop');
+
+  window.addEventListener('scroll', () => {
+    if (nav)     nav.classList.toggle('scrolled', window.scrollY > 20);
+    if (backTop) backTop.classList.toggle('show',  window.scrollY > 400);
   });
-}, { threshold: .4 });
-document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
 
-// ── Fade-in on scroll ─────────────────────────────────────
-const fadeObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: .12 });
-document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
-
-// ── Hamburger menu ────────────────────────────────────────
-const hamburger  = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
-
-// ── Back to top ───────────────────────────────────────────
-document.getElementById('backTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-// ── Contact form (Formspree) ──────────────────────────────
-const form = document.getElementById('contactForm');
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  const btn = form.querySelector('button[type=submit]');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  try {
-    const res = await fetch('https://formspree.io/f/mzdlebjn', {
-      method:  'POST',
-      headers: { 'Accept': 'application/json' },
-      body:    new FormData(form)
+  // ── Active nav link on scroll ───────────────────────────
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const secObs   = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id);
+        });
+      }
     });
-    const json = await res.json();
-    if (res.ok) {
-      form.reset();
-      btn.textContent = '✓ Message Sent!';
-      document.getElementById('formSuccess').style.display = 'block';
-    } else {
-      btn.textContent = json.errors
-        ? json.errors.map(e => e.message).join(', ')
-        : 'Failed — try emailing us directly';
-      btn.disabled = false;
-    }
-  } catch (err) {
-    btn.textContent = 'Network error — check your connection';
-    btn.disabled = false;
+  }, { threshold: .4 });
+  document.querySelectorAll('section[id]').forEach(s => secObs.observe(s));
+
+  // ── Fade-in on scroll ───────────────────────────────────
+  const fadeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: .12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+
+  // ── Hamburger menu ──────────────────────────────────────
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    mobileMenu.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => mobileMenu.classList.remove('open'))
+    );
   }
-});
+
+  // ── Back to top ─────────────────────────────────────────
+  if (backTop) {
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  // ── Contact form (Formspree) ────────────────────────────
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn     = form.querySelector('button[type=submit]');
+      const success = document.getElementById('formSuccess');
+      btn.textContent = 'Sending…';
+      btn.disabled    = true;
+      try {
+        const res  = await fetch('https://formspree.io/f/mzdlebjn', {
+          method:  'POST',
+          headers: { 'Accept': 'application/json' },
+          body:    new FormData(form)
+        });
+        const json = await res.json();
+        if (res.ok) {
+          form.reset();
+          btn.textContent = '✓ Message Sent!';
+          if (success) success.style.display = 'block';
+        } else {
+          btn.textContent = json.errors
+            ? json.errors.map(err => err.message).join(', ')
+            : 'Failed — email us directly';
+          btn.disabled = false;
+        }
+      } catch (err) {
+        btn.textContent = 'Network error — check connection';
+        btn.disabled    = false;
+      }
+    });
+  }
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
